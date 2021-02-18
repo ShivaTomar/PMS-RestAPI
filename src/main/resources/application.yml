@@ -1,0 +1,30 @@
+micronaut:
+  application:
+    name: petManagementSystemRestAPI
+  server:
+    port: 9000
+  security:
+    authentication: bearer
+    enabled: true
+    endpoints:
+      login:
+        enabled: true
+      logout:
+        enabled: true
+        get-allowed: true
+    token:
+      jwt:
+        generator:
+          access-token:
+            expiration: 40000
+        cookie:
+          enabled: false
+        enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: pleaseChangeThisSecretForANewOne
+              jws-algorithm: HS256
+
+
+
