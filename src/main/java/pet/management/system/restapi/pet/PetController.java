@@ -1,4 +1,4 @@
-package Pet.Management.System.RestAPI.Pet;
+package pet.management.system.restapi.pet;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -8,6 +8,8 @@ import io.micronaut.security.rules.SecurityRule;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +19,11 @@ import java.util.Optional;
 public class PetController {
 
     @Inject
-    private PetServicesImpl petServices;
+    private PetServices petServices;
 
     @Post
-    public Single<HttpResponse<String>> addPet(Principal user, @Body Pet pet) {
-        return petServices.addPet(user, pet).map(success -> HttpResponse.created(success));
+    public Single<HttpResponse<String>> addPet(Principal user, @Valid @Body Pet pet) {
+        return petServices.addPet(user, pet).map(HttpResponse::created);
     }
 
     @Get
@@ -30,12 +32,12 @@ public class PetController {
     }
 
     @Get("/{id}")
-    public Single<Optional<Pet>> petDetails(@PathVariable Integer id, Principal user) {
+    public Single<Optional<Pet>> petDetails(@PathVariable @NotBlank Integer id, Principal user) {
         return petServices.petDetails(id, user);
     }
 
     @Put("/{id}")
-    public Maybe<HttpStatus> managePet(@PathVariable Integer id, @Body Pet pet, Principal user) {
+    public Maybe<HttpStatus> managePet(@PathVariable @NotBlank Integer id, @Valid @Body Pet pet, Principal user) {
         return petServices.managePet(id, pet, user)
                 .filter((result) -> !result.equals(Optional.empty()))
                 .map((success) -> {
@@ -44,11 +46,17 @@ public class PetController {
     }
 
     @Delete("/{id}")
-    public Maybe<HttpStatus> deletePet(@PathVariable Integer id, Principal user) {
+    public Maybe<HttpStatus> deletePet(@PathVariable @NotBlank Integer id, Principal user) {
         return petServices.deletePet(id, user)
                 .filter(result -> !result.equals(Optional.empty()))
                 .map(success -> {
                     return HttpStatus.OK;
         });
+    }
+
+    //this endpoint is for testing purpose.
+    @Get("/all")
+    public Single<List<Pet>> allUserPet() {
+        return petServices.allUsersPet();
     }
 }

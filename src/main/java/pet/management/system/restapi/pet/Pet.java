@@ -1,17 +1,16 @@
-package Pet.Management.System.RestAPI.Pet;
+package pet.management.system.restapi.pet;
 
 import io.micronaut.core.annotation.Introspected;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Introspected
 public class Pet {
     @Max(1000)
     private int _id;
     @NotBlank
-    @Size(min = 2, max = 10, message = "Name cannot be short than 2 char & greater than 10 char!")
+    @Max(value = 100, message = "Name cannot be greater than 100 char!")
     private String name;
     @NotBlank
     private String species;

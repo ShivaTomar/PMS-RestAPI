@@ -1,4 +1,4 @@
-package Pet.Management.System.RestAPI.Owner;
+package pet.management.system.restapi.owner;
 
 import io.micronaut.core.annotation.Introspected;
 import lombok.Getter;
@@ -13,7 +13,7 @@ public class Owner {
     private int _id;
 
     @NotBlank
-    @Size(min = 18, max = 100)
+    @Size(min = 3, max = 100)
     private String fullName;
 
     @NotBlank

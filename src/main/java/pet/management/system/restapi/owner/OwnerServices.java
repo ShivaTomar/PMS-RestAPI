@@ -1,6 +1,6 @@
-package Pet.Management.System.RestAPI.Owner;
+package pet.management.system.restapi.owner;
 
-import Pet.Management.System.RestAPI.Utilities.Messages;
+import pet.management.system.restapi.utilities.Messages;
 import io.reactivex.Single;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -8,18 +8,17 @@ import java.security.Principal;
 import java.util.*;
 
 @Singleton
-public class OwnerServicesImpl implements OwnerServices {
+public class OwnerServices{
 
     @Inject
     private Messages message;
 
     private final Map<String, Owner> owners;
 
-    public OwnerServicesImpl() {
+    public OwnerServices() {
         owners = new HashMap<>();
     }
 
-    @Override
     public Single<String> addOwner(Owner owner) {
         int ownerId = owners.size() + 1;
         owner.set_id(ownerId);
@@ -28,12 +27,10 @@ public class OwnerServicesImpl implements OwnerServices {
         return Single.just(message.registerSuccess +ownerId);
     }
 
-    @Override
-    public Single<Optional<Owner>> getOwner(Principal principal) {
-        return Single.defer(() -> Single.just(Optional.ofNullable(owners.get(principal.getName()))));
+    public Single<Optional<Owner>> getOwner(Principal user) {
+        return Single.defer(() -> Single.just(Optional.ofNullable(owners.get(user.getName()))));
     }
 
-    @Override
     public void manageOwner(Owner updates, Principal user) {
         Owner owner = owners.get(user.getName());
         owner.setPassword(updates.getPassword());
@@ -54,7 +51,7 @@ public class OwnerServicesImpl implements OwnerServices {
         return owners.get(ownerName);
     }
 
-    public boolean IsUniqueOwner(String ownerName) {
+    public boolean hasUser(String ownerName) {
         return !owners.containsKey(ownerName);
     }
 }

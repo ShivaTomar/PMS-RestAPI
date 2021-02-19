@@ -1,4 +1,4 @@
-package Pet.Management.System.RestAPI.Utilities;
+package pet.management.system.restapi.utilities;
 
 import javax.inject.Singleton;
 

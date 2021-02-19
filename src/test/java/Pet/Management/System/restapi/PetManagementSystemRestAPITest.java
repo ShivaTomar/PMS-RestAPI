@@ -1,4 +1,4 @@
-package Pet.Management.System.RestAPI;
+package Pet.Management.System.restapi;
 
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;

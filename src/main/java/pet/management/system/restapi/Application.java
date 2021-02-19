@@ -1,4 +1,4 @@
-package Pet.Management.System.RestAPI;
+package pet.management.system.restapi;
 
 import io.micronaut.runtime.Micronaut;
 

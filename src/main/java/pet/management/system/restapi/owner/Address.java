@@ -1,4 +1,4 @@
-package Pet.Management.System.RestAPI.Owner;
+package pet.management.system.restapi.owner;
 
 import io.micronaut.core.annotation.Introspected;
 import lombok.Getter;
