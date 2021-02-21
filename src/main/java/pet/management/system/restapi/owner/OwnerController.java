@@ -1,17 +1,15 @@
 package pet.management.system.restapi.owner;
 
-import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.validation.Validated;
 import io.reactivex.Single;
+import pet.management.system.restapi.utilities.OwnerServices;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
 
@@ -24,18 +22,13 @@ public class OwnerController {
     private OwnerServices ownerServices;
 
     @Get
-    public Single<Object> getOwner(Authentication authentication) {
-        return Single.just(CollectionUtils.mapOf(
-                "isLoggedIn", true,
-                "username", authentication.getName(),
-                "roles", authentication.getAttributes().get("roles"),
-                "attributes", ownerServices.getOwnerAttributes(authentication.getName())
-        ));
+    public Single<Owner> getOwner(Authentication authentication) {
+        return Single.just(ownerServices.getOwnerAttributes(authentication.getName()));
     }
 
-    @Put
-    public Single<HttpStatus> manageOwner(@Body Owner updates, Principal user) {
-        ownerServices.manageOwner(updates, user);
+    @Patch
+    public Single<HttpStatus> updateOwner(@Valid @RequestBean Manage updates, Principal user) {
+        ownerServices.updateOwner(updates, user);
         return Single.just(HttpStatus.OK);
     }
 

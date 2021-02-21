@@ -1,12 +1,12 @@
 package pet.management.system.restapi.pet;
 
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
+import pet.management.system.restapi.utilities.JsonResponse;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -22,8 +22,8 @@ public class PetController {
     private PetServices petServices;
 
     @Post
-    public Single<HttpResponse<String>> addPet(Principal user, @Valid @Body Pet pet) {
-        return petServices.addPet(user, pet).map(HttpResponse::created);
+    public Single<JsonResponse> addPet(Principal user, @Valid @RequestBean Pet pet) {
+        return petServices.addPet(user, pet).map(success -> new JsonResponse(HttpStatus.CREATED.getCode(), success.toString()));
     }
 
     @Get
@@ -32,13 +32,13 @@ public class PetController {
     }
 
     @Get("/{id}")
-    public Single<Optional<Pet>> petDetails(@PathVariable @NotBlank Integer id, Principal user) {
+    public Single<Optional<Pet>> petDetails(@NotBlank Integer id, Principal user) {
         return petServices.petDetails(id, user);
     }
 
     @Put("/{id}")
-    public Maybe<HttpStatus> managePet(@PathVariable @NotBlank Integer id, @Valid @Body Pet pet, Principal user) {
-        return petServices.managePet(id, pet, user)
+    public Maybe<HttpStatus> updatePet(@NotBlank Integer id, @Valid @RequestBean Pet pet, Principal user) {
+        return petServices.updatePet(id, pet, user)
                 .filter((result) -> !result.equals(Optional.empty()))
                 .map((success) -> {
                     return HttpStatus.OK;
@@ -46,7 +46,7 @@ public class PetController {
     }
 
     @Delete("/{id}")
-    public Maybe<HttpStatus> deletePet(@PathVariable @NotBlank Integer id, Principal user) {
+    public Maybe<HttpStatus> deletePet(@NotBlank Integer id, Principal user) {
         return petServices.deletePet(id, user)
                 .filter(result -> !result.equals(Optional.empty()))
                 .map(success -> {

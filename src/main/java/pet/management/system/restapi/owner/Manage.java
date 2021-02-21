@@ -3,16 +3,17 @@ package pet.management.system.restapi.owner;
 import io.micronaut.core.annotation.Introspected;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Introspected
+@ToString
 @Getter
-@Setter
 @AllArgsConstructor
 public class Manage {
     @NotBlank
+    @Size(min = 3, max = 100)
     private String fullName;
 
     @NotBlank

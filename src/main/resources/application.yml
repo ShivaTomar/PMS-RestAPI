@@ -3,6 +3,8 @@ micronaut:
     name: petManagementSystemRestAPI
   server:
     port: 9000
+    cors:
+      enabled: true
   security:
     authentication: bearer
     enabled: true

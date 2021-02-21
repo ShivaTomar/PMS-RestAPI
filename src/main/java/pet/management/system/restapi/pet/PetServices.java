@@ -1,9 +1,8 @@
 package pet.management.system.restapi.pet;
 
-import io.reactivex.Flowable;
-import pet.management.system.restapi.utilities.Messages;
+import pet.management.system.restapi.utilities.Message;
 import io.reactivex.Single;
-import javax.inject.Inject;
+
 import javax.inject.Singleton;
 import java.security.Principal;
 import java.util.*;
@@ -11,23 +10,19 @@ import java.util.stream.Collectors;
 
 @Singleton
 public class PetServices {
-
-    @Inject
-    Messages message;
-    
     private final Map<Integer, Pet> pets;
 
     public PetServices() {
         pets = new HashMap<>();
     }
 
-    public Single<String> addPet(Principal user, Pet pet) {
+    public Single<Integer> addPet(Principal user, Pet pet) {
         int petId = pets.size() + 1;
         pet.set_id(petId);
         pet.setOwner(user.getName());
         pets.put(petId, pet);
 
-        return Single.just(message.petAddedSuccess + user.getName());
+        return Single.just(petId);
     }
 
     public Single<List<Pet>> allPets(Principal user) {
@@ -36,22 +31,16 @@ public class PetServices {
     }
 
     public Single<Optional<Pet>> petDetails(Integer id, Principal user) {
-        return Single.defer(() -> {
-            return Single.just(Optional.ofNullable(findAndGet(id, user)));
-        });
+        return Single.just(Optional.ofNullable(findAndGet(id, user)));
     }
 
-    public Single<Optional<Pet>> managePet(Integer id, Pet pet, Principal user) {
-        return Single.defer(() -> {
-            return Single.just(Optional.ofNullable(findAndUpdate(id, pet, user)));
-        });
+    public Single<Optional<Pet>> updatePet(Integer id, Pet pet, Principal user) {
+        return Single.just(Optional.ofNullable(findAndUpdate(id, pet, user)));
     }
 
     public Single<Optional<Pet>> deletePet(Integer id, Principal user) {
-        return Single.defer(() -> {
-            return Single.just((IsPetPresent(id) && IsOwner(pets.get(id).getOwner(), user))).map(result -> {
-                return !result ? Optional.empty() : Optional.of(findAndDelete(id));
-            });
+        return Single.just((IsPetPresent(id) && IsOwner(pets.get(id).getOwner(), user))).map(result -> {
+            return !result ? Optional.empty() : Optional.of(findAndDelete(id));
         });
     }
 

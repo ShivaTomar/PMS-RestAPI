@@ -13,12 +13,16 @@ import javax.validation.constraints.NotBlank;
 public class Address {
     @NotBlank
     private final String line1;
+
     @NotBlank
     private final String line2;
+
     @NotBlank
     private final String district;
+
     @NotBlank
     private final String state;
+
     @NotBlank
     private final String pincode;
 }

@@ -1,10 +1,11 @@
-package pet.management.system.restapi.auth;
+package pet.management.system.restapi.register;
 
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.annotation.RequestBean;
 import pet.management.system.restapi.owner.Owner;
-import pet.management.system.restapi.owner.OwnerServices;
-import pet.management.system.restapi.utilities.Messages;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Body;
+import pet.management.system.restapi.utilities.JsonResponse;
+import pet.management.system.restapi.utilities.OwnerServices;
+import pet.management.system.restapi.utilities.Message;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
@@ -20,14 +21,11 @@ public class RegisterController {
     @Inject
     private OwnerServices ownerServices;
 
-    @Inject
-    private Messages message;
-
     @Post
-    public Single<HttpResponse<String>> register(@Valid @Body Owner owner) {
+    public Single<JsonResponse> register(@Valid @RequestBean Owner owner) {
         if (ownerServices.hasUser(owner.getUserName())) {
-            return ownerServices.addOwner(owner).map(success -> HttpResponse.created(success));
+            return ownerServices.addOwner(owner).map(success -> new JsonResponse(HttpStatus.CREATED.getCode(), success.toString()));
         }
-        return Single.just(message.registerFail).map(fail -> HttpResponse.badRequest(fail));
+        return Single.just(Message.REGISTER_FAIL).map(fail -> new JsonResponse(HttpStatus.CREATED.getCode(), fail));
     }
 }

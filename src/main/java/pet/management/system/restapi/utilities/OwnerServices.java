@@ -1,8 +1,10 @@
-package pet.management.system.restapi.owner;
+package pet.management.system.restapi.utilities;
 
-import pet.management.system.restapi.utilities.Messages;
+import pet.management.system.restapi.owner.Address;
+import pet.management.system.restapi.owner.Manage;
+import pet.management.system.restapi.owner.Owner;
 import io.reactivex.Single;
-
+import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 import java.security.Principal;
 import java.util.*;
@@ -16,19 +18,25 @@ public class OwnerServices {
         owners = new HashMap<>();
     }
 
-    public Single<String> addOwner(Owner owner) {
+    @PostConstruct
+    public void createTestUser() {
+        owners.put("demo", new Owner(1, "John Doe", "JohnDoe123@gmail.com", "John@123", "Jhon_123",
+                new Address("Avantika, ansal", "near shastri nagar", "Ghaziabad", "UP", "201002")));
+    }
+
+    public Single<Integer> addOwner(Owner owner) {
         int ownerId = owners.size() + 1;
         owner.set_id(ownerId);
         owners.put(owner.getUserName(), owner);
-
-        return Single.just(Messages.registerSuccess + ownerId);
+        return Single.just(ownerId);
     }
 
     public Single<Optional<Owner>> getOwner(Principal user) {
-        return Single.defer(() -> Single.just(Optional.ofNullable(owners.get(user.getName()))));
+        return Single.just(Optional.ofNullable(owners.get(user.getName())));
+        // return Single.defer(() -> Single.just(Optional.ofNullable(owners.get(user.getName()))));
     }
 
-    public void manageOwner(Manage updates, Principal user) {
+    public void updateOwner(Manage updates, Principal user) {
         Owner owner = owners.get(user.getName());
 
         if (updates.getPassword().length() > 0) {

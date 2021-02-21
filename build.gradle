@@ -16,7 +16,7 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("Pet.Management.System.RestAPI.*")
+        annotations("pet.management.system.restapi.*")
     }
 }
 
@@ -33,7 +33,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("Pet.Management.System.RestAPI.Application")
+    mainClass.set("pet.management.system.restapi.Application")
 }
 
 java {
