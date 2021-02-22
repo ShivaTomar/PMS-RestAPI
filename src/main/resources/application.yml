@@ -27,6 +27,3 @@ micronaut:
             generator:
               secret: pleaseChangeThisSecretForANewOne
               jws-algorithm: HS256
-
-
-

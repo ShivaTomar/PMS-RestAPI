@@ -1,8 +1,6 @@
 package pet.management.system.restapi.pet;
 
-import pet.management.system.restapi.utilities.Message;
 import io.reactivex.Single;
-
 import javax.inject.Singleton;
 import java.security.Principal;
 import java.util.*;
@@ -42,10 +40,6 @@ public class PetServices {
         return Single.just((IsPetPresent(id) && IsOwner(pets.get(id).getOwner(), user))).map(result -> {
             return !result ? Optional.empty() : Optional.of(findAndDelete(id));
         });
-    }
-
-    public Single<List<Pet>> allUsersPet() {
-        return Single.just(new ArrayList<>(pets.values()));
     }
 
     public Pet findAndGet(Integer id, Principal user) {

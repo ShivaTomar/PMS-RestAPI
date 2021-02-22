@@ -1,7 +1,6 @@
-package pet.management.system.restapi.owner;
+package pet.management.system.restapi.utilities;
 
 import io.micronaut.core.annotation.Introspected;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,7 +10,6 @@ import javax.validation.constraints.*;
 @ToString
 @Getter
 @Setter
-@AllArgsConstructor
 public class Owner {
     @Max(10000)
     private int _id;
@@ -34,4 +32,19 @@ public class Owner {
 
     @NotNull
     private Address address;
+
+    public Owner(String fullName, String userName, String email, String password, Address address) {
+        this.fullName = fullName;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+    }
+
+    public Owner(String fullName, String userName, String email, Address address) {
+        this.fullName = fullName;
+        this.userName = userName;
+        this.email = email;
+        this.address = address;
+    }
 }

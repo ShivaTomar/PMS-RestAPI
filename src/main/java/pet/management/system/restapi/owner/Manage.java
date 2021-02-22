@@ -4,7 +4,7 @@ import io.micronaut.core.annotation.Introspected;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import javax.validation.constraints.NotBlank;
+import javax.annotation.Nullable;
 import javax.validation.constraints.Size;
 
 @Introspected
@@ -12,11 +12,11 @@ import javax.validation.constraints.Size;
 @Getter
 @AllArgsConstructor
 public class Manage {
-    @NotBlank
+    @Nullable
     @Size(min = 3, max = 100)
     private String fullName;
 
-    @NotBlank
+    @Nullable
     @Size(min = 7, message = "Password must be of minimum 7 characters long.")
     private String password;
 }

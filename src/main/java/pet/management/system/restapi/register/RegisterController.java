@@ -2,8 +2,9 @@ package pet.management.system.restapi.register;
 
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.RequestBean;
-import pet.management.system.restapi.owner.Owner;
-import pet.management.system.restapi.utilities.JsonResponse;
+import io.micronaut.http.exceptions.HttpStatusException;
+import pet.management.system.restapi.utilities.Owner;
+import pet.management.system.restapi.utilities.JsonObject;
 import pet.management.system.restapi.utilities.OwnerServices;
 import pet.management.system.restapi.utilities.Message;
 import io.micronaut.http.annotation.Controller;
@@ -22,10 +23,11 @@ public class RegisterController {
     private OwnerServices ownerServices;
 
     @Post
-    public Single<JsonResponse> register(@Valid @RequestBean Owner owner) {
+    public Single<JsonObject> register(@Valid @RequestBean Owner owner) {
         if (ownerServices.hasUser(owner.getUserName())) {
-            return ownerServices.addOwner(owner).map(success -> new JsonResponse(HttpStatus.CREATED.getCode(), success.toString()));
+            return ownerServices.addOwner(owner).map(success -> new JsonObject(Message.REGISTER_SUCCESS + success));
         }
-        return Single.just(Message.REGISTER_FAIL).map(fail -> new JsonResponse(HttpStatus.CREATED.getCode(), fail));
+
+        return Single.error(new HttpStatusException(HttpStatus.BAD_REQUEST, Message.REGISTER_FAIL));
     }
 }

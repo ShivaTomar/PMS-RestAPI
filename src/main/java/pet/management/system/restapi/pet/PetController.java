@@ -6,7 +6,9 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
-import pet.management.system.restapi.utilities.JsonResponse;
+import pet.management.system.restapi.utilities.JsonObject;
+import pet.management.system.restapi.utilities.Message;
+
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -22,8 +24,9 @@ public class PetController {
     private PetServices petServices;
 
     @Post
-    public Single<JsonResponse> addPet(Principal user, @Valid @RequestBean Pet pet) {
-        return petServices.addPet(user, pet).map(success -> new JsonResponse(HttpStatus.CREATED.getCode(), success.toString()));
+    public Single<JsonObject> addPet(Principal user, @Valid @RequestBean Pet pet) {
+        return petServices.addPet(user, pet)
+                .map(success -> new JsonObject(Message.PET_ADDED_SUCCESS + success));
     }
 
     @Get
@@ -42,7 +45,7 @@ public class PetController {
                 .filter((result) -> !result.equals(Optional.empty()))
                 .map((success) -> {
                     return HttpStatus.OK;
-        });
+                });
     }
 
     @Delete("/{id}")
@@ -51,12 +54,6 @@ public class PetController {
                 .filter(result -> !result.equals(Optional.empty()))
                 .map(success -> {
                     return HttpStatus.OK;
-        });
-    }
-
-    //this endpoint is for testing purpose.
-    @Get("/all")
-    public Single<List<Pet>> allUserPet() {
-        return petServices.allUsersPet();
+                });
     }
 }

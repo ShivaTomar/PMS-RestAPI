@@ -1,8 +1,6 @@
 package pet.management.system.restapi.utilities;
 
-import pet.management.system.restapi.owner.Address;
 import pet.management.system.restapi.owner.Manage;
-import pet.management.system.restapi.owner.Owner;
 import io.reactivex.Single;
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
@@ -20,8 +18,8 @@ public class OwnerServices {
 
     @PostConstruct
     public void createTestUser() {
-        owners.put("demo", new Owner(1, "John Doe", "JohnDoe123@gmail.com", "John@123", "Jhon_123",
-                new Address("Avantika, ansal", "near shastri nagar", "Ghaziabad", "UP", "201002")));
+        owners.put("John_123", new Owner("John Doe", "John_123", "JohnDoe123@gmail.com", "John@123",
+                new Address("2748  Green", " Acres Road", "Henderson", "North Carolina", "27536")));
     }
 
     public Single<Integer> addOwner(Owner owner) {
@@ -33,24 +31,19 @@ public class OwnerServices {
 
     public Single<Optional<Owner>> getOwner(Principal user) {
         return Single.just(Optional.ofNullable(owners.get(user.getName())));
-        // return Single.defer(() -> Single.just(Optional.ofNullable(owners.get(user.getName()))));
     }
 
     public void updateOwner(Manage updates, Principal user) {
         Owner owner = owners.get(user.getName());
 
-        if (updates.getPassword().length() > 0) {
+        if (updates.getPassword() != null) {
             owner.setPassword(updates.getPassword());
         }
-        if (updates.getFullName().length() > 0) {
+        if (updates.getFullName() != null) {
             owner.setFullName(updates.getFullName());
         }
 
         owners.put(user.getName(), owner);
-    }
-
-    public Single<List<Owner>> allOwners() {
-        return Single.just(new ArrayList<>(owners.values()));
     }
 
     public String getOwnerPassword(String ownerName) {
@@ -59,7 +52,8 @@ public class OwnerServices {
     }
 
     public Owner getOwnerAttributes(String ownerName) {
-        return owners.get(ownerName);
+        Owner owner = owners.get(ownerName);
+        return new Owner(owner.getFullName(), owner.getUserName(), owner.getEmail(), owner.getAddress());
     }
 
     public boolean hasUser(String ownerName) {
