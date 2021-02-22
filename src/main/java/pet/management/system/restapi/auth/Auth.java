@@ -1,5 +1,6 @@
 package pet.management.system.restapi.auth;
 
+import pet.management.system.restapi.utilities.Base64BasicEncryption;
 import pet.management.system.restapi.utilities.OwnerServices;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import io.micronaut.http.HttpRequest;
@@ -25,7 +26,7 @@ public class Auth implements AuthenticationProvider {
             return Flowable.just(new AuthenticationFailed(AuthenticationFailureReason.USER_NOT_FOUND));
         }
 
-        if (password.equals(ownerServices.getOwnerPassword(username))) {
+        if (password.equals(Base64BasicEncryption.passwordDecode(ownerServices.getOwnerPassword(username)))) {
             UserDetails details = new UserDetails(username, Collections.singletonList("Owner"));
             return Flowable.just(details);
         }

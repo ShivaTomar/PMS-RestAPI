@@ -18,14 +18,16 @@ public class OwnerServices {
 
     @PostConstruct
     public void createTestUser() {
-        owners.put("John_123", new Owner("John Doe", "John_123", "JohnDoe123@gmail.com", "John@123",
+        owners.put("John_123", new Owner("John Doe", "John_123", "JohnDoe123@gmail.com", "Sm9obkAxMjM=",
                 new Address("2748  Green", " Acres Road", "Henderson", "North Carolina", "27536")));
     }
 
     public Single<Integer> addOwner(Owner owner) {
         int ownerId = owners.size() + 1;
         owner.set_id(ownerId);
+        owner.setPassword(Base64BasicEncryption.passwordEncrypt(owner.getPassword()));
         owners.put(owner.getUserName(), owner);
+
         return Single.just(ownerId);
     }
 

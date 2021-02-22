@@ -14,6 +14,8 @@ import io.micronaut.security.rules.SecurityRule;
 import io.reactivex.Single;
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.crypto.*;
+
 
 @Controller("/register")
 @Secured(SecurityRule.IS_ANONYMOUS)
